@@ -319,6 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			// Show loading state
 			submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
 			submitBtn.disabled = true;
+			submitBtn.style.backgroundColor = '#1ba87e';
 			
 			fetch(form.action, {
 				method: 'POST',
