@@ -1,6 +1,6 @@
 /*
 ================================================================
-* Template:  	 Simone - Personal Portfolio Template
+* Template:  	 Amina - Personal Portfolio Template
 * Written by: 	 Harnish Design - (http://www.harnishdesign.net)
 * Description:   Main Custom Script File
 ================================================================
@@ -298,6 +298,43 @@
 	$('#back-to-top').on("click", function () {
 		$('html, body').animate({ scrollTop: 0 }, 'slow');
 		return false;
+	});
+
+		/*------------------------
+	   Contact Form Handling
+	-------------------------- */
+	$(document).ready(function() {
+		$('#contact-form').on('submit', function(e) {
+			e.preventDefault();
+			
+			var form = this;
+			var submitBtn = $('#submit-btn');
+			var originalText = submitBtn.html();
+			
+			// Show loading state
+			submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Sending...');
+			submitBtn.prop('disabled', true);
+			
+			$.ajax({
+				url: form.action,
+				method: 'POST',
+				data: new FormData(form),
+				processData: false,
+				contentType: false,
+				success: function() {
+					// Success - redirect to thank you page
+					window.location.href = 'thank-you.html';
+				},
+				error: function() {
+					alert('Oops! There was a problem sending your message. Please try again.');
+				},
+				complete: function() {
+					// Reset button
+					submitBtn.html(originalText);
+					submitBtn.prop('disabled', false);
+				}
+			});
+		});
 	});
 
 })(jQuery)
