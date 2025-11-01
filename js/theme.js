@@ -300,41 +300,50 @@
 		return false;
 	});
 
-		/*------------------------
-	   Contact Form Handling
-	-------------------------- */
-	$(document).ready(function() {
-		$('#contact-form').on('submit', function(e) {
+})(jQuery);
+
+/*------------------------
+   Contact Form Handling
+-------------------------- */
+document.addEventListener('DOMContentLoaded', function() {
+	const contactForm = document.getElementById('contact-form');
+	
+	if (contactForm) {
+		contactForm.addEventListener('submit', function(e) {
 			e.preventDefault();
 			
-			var form = this;
-			var submitBtn = $('#submit-btn');
-			var originalText = submitBtn.html();
+			const form = e.target;
+			const submitBtn = document.getElementById('submit-btn');
+			const originalText = submitBtn.innerHTML;
 			
 			// Show loading state
-			submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Sending...');
-			submitBtn.prop('disabled', true);
+			submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+			submitBtn.disabled = true;
 			
-			$.ajax({
-				url: form.action,
+			fetch(form.action, {
 				method: 'POST',
-				data: new FormData(form),
-				processData: false,
-				contentType: false,
-				success: function() {
+				body: new FormData(form),
+				headers: {
+					'Accept': 'application/json'
+				}
+			})
+			.then(response => {
+				if (response.ok) {
 					// Success - redirect to thank you page
 					window.location.href = 'thank-you.html';
-				},
-				error: function() {
-					alert('Oops! There was a problem sending your message. Please try again.');
-				},
-				complete: function() {
-					// Reset button
-					submitBtn.html(originalText);
-					submitBtn.prop('disabled', false);
+				} else {
+					throw new Error('Form submission failed');
 				}
+			})
+			.catch(error => {
+				alert('Oops! There was a problem sending your message. Please try again.');
+				console.error('Form submission error:', error);
+			})
+			.finally(() => {
+				// Reset button
+				submitBtn.innerHTML = originalText;
+				submitBtn.disabled = false;
 			});
 		});
-	});
-
-})(jQuery)
+	}
+});
