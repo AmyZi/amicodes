@@ -9,3 +9,8 @@ RewriteRule ^(.*)$ $1.html [L]
 # Redirect old .html URLs to new clean URLs
 RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.html
 RewriteRule ^(.*)\.html$ /$1/ [R=301,L]
+
+<FilesMatch "^(header|footer)\.html$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>
